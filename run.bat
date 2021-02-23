@@ -1,1 +1,1 @@
-pyinstaller --noconsole --onefile src/main.py
+pyinstaller --noconsole --windowed --onefile src/main.py
