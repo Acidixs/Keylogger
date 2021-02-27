@@ -3,3 +3,4 @@ pynput==1.6.8
 winshell==0.6
 pywin32==300
 python-dotenv==0.15.0
+ansicolors==1.0.2
