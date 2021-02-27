@@ -5,9 +5,8 @@ PORT = 12345
 SIZE = 1024
 HOST = ""
 
-print("yo")
 
-s = socket.socket()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 print(f"Server binded to {PORT}")
 
