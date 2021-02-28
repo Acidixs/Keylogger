@@ -1,7 +1,6 @@
 from pynput import keyboard
 from datetime import datetime
 import getpass
-import shutil
 import os.path
 import winshell
 import win32com.client

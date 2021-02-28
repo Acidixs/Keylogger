@@ -1,6 +1,4 @@
 import socket
-import time
-import subprocess
 
 class ClientSocket:
     def __init__(self):
