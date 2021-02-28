@@ -1,5 +1,8 @@
 import socket
+import threading
 from logo import Logo
+import time
+
 
 class ServerSocket:
     def __init__(self):
@@ -7,6 +10,7 @@ class ServerSocket:
         self.SIZE = 1024
         self.HOST = ""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.hostname = socket.gethostbyname(socket.gethostname())
         self.logo = Logo()
 
 
@@ -18,14 +22,22 @@ class ServerSocket:
         self.socket.listen(5)
         print(f"Server listening to port: {self.PORT}")
 
-
-    def get_info(self):
         while True:
             client, address = self.socket.accept()
-            print("Received connection from", address)
-            data = client.recv(self.SIZE)
-            print("Client:", data.decode("utf-8"))
-            client.close()
+            thread = threading.Thread(target=self.handle_client, args=(client, address))
+            thread.start()
+            print(f"Active connections: {threading.active_count() - 1 }")
+
+
+    def handle_client(self, client, address):
+        print(f"New connection from: {self.hostname}")
+        while True:
+            try:
+                data = client.recv(self.SIZE)
+                print("Client:", data.decode("utf-8"))
+            except:
+                print(f"Lost connection to {self.hostname}")
+                return
 
 
 if __name__ == "__main__":
