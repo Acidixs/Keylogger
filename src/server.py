@@ -6,17 +6,17 @@ class ServerSocket:
         self.PORT = 12345
         self.SIZE = 1024
         self.HOST = ""
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.logo = Logo()
 
 
     def start(self):
         self.logo.draw()
 
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((self.HOST, self.PORT))
-        print(f"Server binded to {self.PORT}")
+        print(f"Server binded to port: {self.PORT}")
         self.socket.listen(5)
-        print(f"Server listening to {self.PORT}")
+        print(f"Server listening to port: {self.PORT}")
 
 
     def get_info(self):
