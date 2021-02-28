@@ -10,7 +10,6 @@ class ServerSocket:
         self.SIZE = 1024
         self.HOST = ""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.hostname = socket.gethostbyname(socket.gethostname())
         self.logo = Logo()
 
 
@@ -30,13 +29,13 @@ class ServerSocket:
 
 
     def handle_client(self, client, address):
-        print(f"New connection from: {self.hostname}")
+        print(f"New connection from: {address[0]}")
         while True:
             try:
                 data = client.recv(self.SIZE)
-                print("Client:", data.decode("utf-8"))
+                print(address[0], data.decode("utf-8"))
             except:
-                print(f"Lost connection to {self.hostname}")
+                print(f"Lost connection to {address[0]}")
                 return
 
 
