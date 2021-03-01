@@ -2,6 +2,10 @@ import socket
 import threading
 from logo import Logo
 import time
+from datetime import datetime
+import colors
+import os
+os.system('color')
 
 
 class ServerSocket:
@@ -29,17 +33,18 @@ class ServerSocket:
 
 
     def handle_client(self, client, address):
-        print(f"New connection from: {address[0]}")
+        time = datetime.now().replace(microsecond=0)
+
+        print(colors.green(f"{time} | New connection from: {address[0]}"))
         while True:
             try:
                 data = client.recv(self.SIZE)
                 print(address[0], data.decode("utf-8"))
             except:
-                print(f"Lost connection to {address[0]}")
+                print(colors.red(f"{time} | Lost connection to {address[0]}"))
                 return
 
 
 if __name__ == "__main__":
     server = ServerSocket()
     server.start()
-    server.get_info()
